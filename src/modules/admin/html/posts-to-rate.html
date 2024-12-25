@@ -1,0 +1,423 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Xác nhận bài viết</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css" />
+        <script src="https://cdn.jsdelivr.net/npm/dayjs@1/dayjs.min.js"></script>
+        <style>
+            * {
+                margin: 0;
+                padding: 0;
+                font-size: 1rem;
+            }
+
+            header h1 {
+                text-align: center;
+                font-size: 32px;
+                padding-top: 1rem;
+                padding-bottom: 1rem;
+            }
+
+            .cards {
+                display: flex;
+                flex-direction: row;
+                flex-wrap: wrap;
+                width: fit-content;
+                justify-content: center;
+                gap: 1rem;
+                margin: 0 auto;
+            }
+
+            .card {
+                width: 300px;
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            }
+
+            .card:first-child {
+                display: none;
+            }
+
+            .card__media {
+                height: 400px;
+                display: flex;
+                flex-direction: column;
+                justify-content: center;
+                align-items: center;
+                background-color: rgba(0, 0, 0, 0.1);
+                margin-bottom: 0.5rem;
+                position: relative;
+            }
+
+            .card__media img,
+            video {
+                width: 100%;
+                object-fit: contain;
+                height: 50%;
+            }
+
+            .card__media video {
+                height: 100%;
+            }
+
+            .card__media img:only-child {
+                height: 100%;
+            }
+
+            .card__media .img-plus {
+                position: absolute;
+                bottom: 0;
+                height: 50%;
+                width: 100%;
+                background-color: rgba(0, 0, 0, 0.2);
+                color: white;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                font-weight: 600;
+            }
+
+            .card__top {
+                display: flex;
+                flex-direction: row;
+                padding: 1rem;
+                padding-bottom: 0.5rem;
+                gap: 1rem;
+            }
+
+            .userinfo {
+                display: flex;
+                flex-direction: column;
+                justify-content: space-between;
+            }
+
+            .avatar {
+                height: 40px;
+                width: 40px;
+                border-radius: 50%;
+                font-size: 24px;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+            }
+
+            .avatar img {
+                width: 40px;
+                height: 40px;
+                object-fit: cover;
+                border-radius: 50%;
+            }
+
+            .card__describe {
+                margin-top: 0;
+                margin-bottom: 0.5rem;
+                padding-left: 1rem;
+            }
+
+            button {
+                padding: 0.35rem;
+                font-size: 1rem;
+                border: 0;
+                border-radius: 8px;
+                transition: all 300ms;
+            }
+
+            button:hover {
+                opacity: 0.8;
+            }
+
+            .actions-count {
+                padding: 0 1rem;
+            }
+
+            .actions-count > div {
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+            }
+
+            .trust-count {
+                width: 50%;
+            }
+
+            .fake-count {
+                width: 50%;
+            }
+
+            .card__footer {
+                display: flex;
+                flex-direction: row;
+                gap: 1rem;
+                margin-top: 0.5rem;
+                padding: 1rem;
+                padding-top: 0.5rem;
+            }
+
+            .card__footer span {
+                text-align: center;
+                display: flex;
+                justify-content: center;
+                width: 100%;
+                padding: 0.35rem;
+                border-radius: 8px;
+            }
+
+            .card__footer span.trust {
+                background-color: rgba(0, 0, 255, 0.5);
+            }
+
+            .card__footer span.fake {
+                background-color: rgba(255, 0, 0, 0.5);
+            }
+
+            .button-trust {
+                background-color: blue;
+                width: 100%;
+                color: white;
+            }
+
+            .button-fake {
+                background-color: red;
+                width: 100%;
+                color: white;
+            }
+
+            .pagination {
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+                width: fit-content;
+                margin: 2rem auto;
+            }
+
+            .pagination button {
+                width: 40px;
+                height: 40px;
+                transition: all 300ms;
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            .pagination button:hover {
+                box-shadow: rgba(100, 100, 111, 0.2) 0px 7px 29px 0px;
+            }
+
+            .pages {
+                display: flex;
+                flex-direction: row;
+                gap: 0.5rem;
+            }
+
+            .page:first-child {
+                display: none;
+            }
+        </style>
+    </head>
+    <body>
+        <header>
+            <h1>Xác nhận bài viết</h1>
+        </header>
+        <main class="js-main">
+            <div class="js-cards cards">
+                <div class="js-card card">
+                    <div class="js-card__top card__top">
+                        <div class="js-avatar avatar">avatar</div>
+                        <div class="js-userinfo userinfo">
+                            <span class="js-username username">author name | email</span>
+                            <time class="js-time time">time</time>
+                        </div>
+                    </div>
+                    <div class="js-card__body">
+                        <p class="js-card__describe card__describe">describe</p>
+                        <div class="js-card__media card__media">img | video</div>
+                        <div class="js-card__actions-count actions-count">
+                            <div>
+                                <span class="js-trust-count trust-count">Trust - </span>
+                                <span class="js-fake-count fake-count">Fake - </span>
+                            </div>
+                            <div>
+                                <span class="js-kudos-count trust-count">Kudos - </span>
+                                <span class="js-disappointed-count fake-count">Disappointed - </span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="js-card__footer card__footer">
+                        <button class="js-button-trust button-trust">Trust</button>
+                        <button class="js-button-fake button-fake">Fake</button>
+                    </div>
+                </div>
+            </div>
+            <div class="js-pagination pagination">
+                <button class="js-prev prev" title="prev"><i class="fa-solid fa-angle-left"></i></button>
+                <div class="js-pages pages">
+                    <button class="js-page page" title="page"></button>
+                </div>
+                <button class="js-next next" title="next"><i class="fa-solid fa-angle-right"></i></button>
+            </div>
+        </main>
+        <script type="module">
+            const cards = document.getElementsByClassName('js-cards')[0];
+            const card = document.getElementsByClassName('js-card')[0];
+
+            const cardTop = document.getElementsByClassName('js-card__top')[0];
+            const avatar = document.getElementsByClassName('js-avatar')[0];
+            const userInfo = document.getElementsByClassName('js-userinfo')[0];
+            const username = document.getElementsByClassName('js-username')[0];
+            const time = document.getElementsByClassName('js-time')[0];
+
+            const cardBody = document.getElementsByClassName('js-card__body')[0];
+            const cardDecribe = document.getElementsByClassName('js-card__describe')[0];
+            const cardMedia = document.getElementsByClassName('js-card__media')[0];
+            const cardActionsCount = document.getElementsByClassName('js-card__actions-count')[0];
+
+            const trustCount = document.getElementsByClassName('js-trust-count')[0];
+            const fakeCount = document.getElementsByClassName('js-fake-count')[0];
+            const kudosCount = document.getElementsByClassName('js-kudos-count')[0];
+            const disappointedCount = document.getElementsByClassName('js-disappointed-count')[0];
+
+            const cardFooter = document.getElementsByClassName('js-card__footer')[0];
+
+            const pagination = document.getElementsByClassName('js-pagination')[0];
+            const pages = document.getElementsByClassName('js-pages')[0];
+            const page = document.getElementsByClassName('js-page')[0];
+            const prevBtn = document.getElementsByClassName('js-prev')[0];
+            const nextBtn = document.getElementsByClassName('js-next')[0];
+
+            const query = new URLSearchParams(window.location.search);
+
+            const limit = query.get('limit') ?? 4;
+            const p = Number(query.get('page') ?? 1);
+
+            // token
+            // const token =
+            //     'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6MiwiZGV2aWNlX2lkIjoic3RyaW5nIiwiaWF0IjoxNzAzNjQ3NDg2LCJleHAiOjE3MDM2OTA2ODZ9.xi60alywbkfuMT-QE63MumCXS_tdxAusd6KafPZwhKI';
+            const headers = new Headers({
+                'Content-Type': 'application/json',
+                Authorization: 'Bearer ' + token,
+            });
+            const posts = fetch(`/get_posts_to_rate?page=${p}&limit=${limit}`, {
+                headers,
+            })
+                .then((value) => value.json())
+                .then((res) => res.data)
+                .then((data) => {
+                    const posts = data.items;
+                    const postCards = posts.map((post) => {
+                        avatar.innerHTML = post.author.avatar
+                            ? `<img src='${post.author.avatar}' alt='${post.author.name}' />`
+                            : '<i class="fa-solid fa-user"></i>';
+                        username.innerHTML = post.author.name;
+                        time.innerHTML = dayjs(post.created).format('DD/MM/YYYY HH:mm');
+                        cardDecribe.innerHTML = post.described;
+                        cardMedia.innerHTML =
+                            post.image.length > 0
+                                ? post.image.reduce((imgsHtml, img, index) => {
+                                      if (index < 2) {
+                                          return imgsHtml + `<img src=${img.url} alt='' />`;
+                                      }
+                                      return imgsHtml;
+                                  }, '')
+                                : post.video
+                                ? `<video controls><source src=${post.video.url} ></video>`
+                                : 'No Media';
+                        if (post.image.length > 2) {
+                            cardMedia.innerHTML += `<div class="img-plus">+${post.image.length - 2}</div>`;
+                        }
+                        trustCount.innerHTML = 'Trust - ' + post.trust_count;
+                        fakeCount.innerHTML = 'Fake - ' + post.fake_count;
+                        kudosCount.innerHTML = 'Kudos - ' + post.kudos_count;
+                        disappointedCount.innerHTML = 'Disappointed - ' + post.disappointed_count;
+                        const newCard = card.cloneNode(true);
+                        const newCardFooter = newCard.children[2];
+                        if (post.rate !== null) {
+                            newCardFooter.innerHTML =
+                                post.rate === 1
+                                    ? '<span class="trust">Rate Trust</span>'
+                                    : post.rate === 0
+                                    ? '<span class="fake">Rate Fake</span>'
+                                    : newCardFooter.innerHTML;
+                            return newCard;
+                        }
+                        const newTrustBtn = newCardFooter.children[0];
+                        newTrustBtn.addEventListener('click', async () => {
+                            await fetch('/rate_post', {
+                                method: 'POST',
+                                headers,
+                                body: JSON.stringify({
+                                    id: post.id,
+                                    rate: 1,
+                                }),
+                            }).then((res) => {
+                                window.location.reload();
+                            });
+                        });
+
+                        const newFakeBtn = newCardFooter.children[1];
+                        newFakeBtn.addEventListener('click', async () => {
+                            await fetch('/rate_post', {
+                                method: 'POST',
+                                headers,
+                                body: JSON.stringify({
+                                    id: post.id,
+                                    rate: 0,
+                                }),
+                            }).then(() => {
+                                window.location.reload();
+                            });
+                        });
+
+                        return newCard;
+                    });
+                    cards.append(...postCards);
+
+                    const pagesCount = Math.ceil(data.total / limit);
+                    if (pagesCount < 1) {
+                        pagination.style = 'display: none';
+                    }
+                    if (p == 1) {
+                        prevBtn.style = 'display: none';
+                    }
+
+                    prevBtn.addEventListener('click', () => {
+                        if (query.get('page')) {
+                            query.set('page', p - 1);
+                        }
+                        query.append('page', p - 1);
+                        window.location.search = query;
+                    });
+
+                    if (p == pagesCount) {
+                        nextBtn.style = 'display: none';
+                    }
+
+                    nextBtn.addEventListener('click', () => {
+                        if (query.get('page')) {
+                            query.set('page', p + 1);
+                        }
+                        query.append('page', p + 1);
+                        window.location.search = query;
+                    });
+                    let pageIndex = 1;
+                    const pageBtns = [];
+                    while (pageIndex <= pagesCount) {
+                        page.innerHTML = pageIndex;
+                        const pageBtn = page.cloneNode(true);
+                        if (pageBtn.innerHTML == p) {
+                            pageBtn.style = 'border: 2px solid rgba(0, 0, 0, .8)';
+                        }
+                        pageBtn.addEventListener('click', () => {
+                            if (query.get('page')) {
+                                query.set('page', pageBtn.innerHTML);
+                            } else {
+                                query.append('page', pageBtn.innerHTML);
+                            }
+                            window.location.search = query;
+                        });
+                        pageBtns.push(pageBtn);
+                        pageIndex++;
+                    }
+                    pages.append(...pageBtns);
+                });
+        </script>
+    </body>
+</html>

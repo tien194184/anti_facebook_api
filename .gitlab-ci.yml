@@ -1,0 +1,33 @@
+image: node:18.10-slim
+
+stages:
+    - deploy
+
+Deploy:
+    stage: deploy
+    environment: production
+    only:
+        - main
+    before_script:
+        - cp ${ENV_FILE} .env
+        - cp ${FIREBASE_JSON} firebase.json
+        - 'which ssh-agent || ( apt-get update -y && apt-get install openssh-client git -y )'
+        - eval $(ssh-agent -s)
+        - echo "${SSH_PRIVATE_KEY}"  | tr -d '\r' | ssh-add -
+        - mkdir -p ~/.ssh
+        - chmod 700 ~/.ssh
+        - ssh-keyscan ${SERVER_IP} >> ~/.ssh/known_hosts
+        - chmod 644 ~/.ssh/known_hosts
+        - apt-get install rsync -y
+    script:
+        - yarn install --frozen-lockfile
+        - yarn build
+        - ssh ${USERNAME}@${SERVER_IP} "pm2 stop '$PROCESS_NAME'"
+        - rsync -avq --delete ./dist/ ${USERNAME}@${SERVER_IP}:${APP_DIR}/dist
+        - rsync -avq ./uploads/ ${USERNAME}@${SERVER_IP}:${APP_DIR}/uploads
+        - rsync -avq ./.env ${USERNAME}@${SERVER_IP}:${APP_DIR}
+        - rsync -avq ./firebase.json ${USERNAME}@${SERVER_IP}:${APP_DIR}
+        - rsync -avq ./package.json ${USERNAME}@${SERVER_IP}:${APP_DIR}
+        - rsync -avq ./yarn.lock ${USERNAME}@${SERVER_IP}:${APP_DIR}
+        - ssh ${USERNAME}@${SERVER_IP} "cd '$APP_DIR' && yarn install --production --frozen-lockfile && yarn deploy:migrate"
+        - ssh ${USERNAME}@${SERVER_IP} "pm2 start '$PROCESS_NAME'"
